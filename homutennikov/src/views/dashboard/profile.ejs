@@ -1,0 +1,38 @@
+<%- include("../partials/head", { title: "Профиль" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--narrow">
+  <section class="panel">
+    <div class="panel__head">
+      <div class="panel__avatar">
+        <%- include("../partials/avatar", { user: currentUser, size: "xl" }) %>
+      </div>
+      <div>
+        <h1 class="panel__title">Профиль</h1>
+        <div class="muted"><%= currentUser.email %></div>
+      </div>
+    </div>
+
+    <form class="form" action="/dashboard/profile?_method=PUT" method="post" enctype="multipart/form-data">
+      <label class="field">
+        <span class="field__label">Имя</span>
+        <input class="input" name="name" value="<%= currentUser.name %>" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">О себе</span>
+        <textarea class="textarea" name="bio" rows="4"><%= currentUser.bio || "" %></textarea>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Аватар (картинка)</span>
+        <input class="input" type="file" name="avatar" accept="image/*" />
+      </label>
+
+      <button class="btn btn--primary" type="submit">Сохранить</button>
+      <a class="btn btn--ghost" href="/dashboard">Назад</a>
+    </form>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

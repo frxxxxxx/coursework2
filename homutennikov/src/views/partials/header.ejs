@@ -1,0 +1,47 @@
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">PulseBlog</span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-label="Открыть меню"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-nav-toggle
+    >
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+
+    <nav id="site-nav" class="topnav" aria-label="Навигация" data-nav>
+      <a class="topnav__link" href="/feed">Лента</a>
+      <% if (currentUser) { %>
+        <a class="topnav__link" href="/liked">Лайкнутые</a>
+        <a class="topnav__link" href="/dashboard">Кабинет</a>
+        <% if (currentUser.role === 'admin') { %>
+          <a class="topnav__link" href="/admin">Админ</a>
+        <% } %>
+        <form action="/auth/logout" method="post" class="topnav__form">
+          <button class="btn btn--ghost" type="submit">Выйти</button>
+        </form>
+      <% } else { %>
+        <a class="btn btn--ghost" href="/auth/login">Войти</a>
+        <a class="btn btn--primary" href="/auth/register">Регистрация</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+
+<div class="nav-overlay" data-nav-overlay hidden></div>
+
+<% if ((flash.success && flash.success.length) || (flash.error && flash.error.length)) { %>
+  <div class="container">
+    <div class="flash">
+      <% (flash.success || []).forEach(m => { %><div class="flash__item flash__item--ok"><%= m %></div><% }) %>
+      <% (flash.error || []).forEach(m => { %><div class="flash__item flash__item--bad"><%= m %></div><% }) %>
+    </div>
+  </div>
+<% } %>

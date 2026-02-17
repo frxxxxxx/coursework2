@@ -1,0 +1,15 @@
+<%- include("../partials/head", { title: "Ошибка" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--narrow">
+  <section class="panel">
+    <h1 class="panel__title">500</h1>
+    <p class="muted">Что-то пошло не так. Проверь консоль сервера.</p>
+    <% if (process.env.NODE_ENV !== 'production') { %>
+      <pre class="codeblock"><%= (error && error.stack) ? error.stack : error %></pre>
+    <% } %>
+    <a class="btn btn--ghost" href="/">На главную</a>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

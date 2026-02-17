@@ -1,0 +1,53 @@
+<%- include("../partials/head", { title: "Админ" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Админка</h1>
+    <div class="section__actions">
+      <a class="btn btn--ghost" href="/admin/users">Пользователи</a>
+      <a class="btn btn--ghost" href="/admin/posts">Посты</a>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat__num"><%= stats.users %></div>
+      <div class="muted">пользователей</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num"><%= stats.posts %></div>
+      <div class="muted">постов</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num"><%= stats.comments %></div>
+      <div class="muted">комментариев</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num"><%= stats.likes %></div>
+      <div class="muted">лайков</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Последние посты</div>
+    <div class="list">
+      <% latest.forEach(p => { %>
+        <article class="rowcard rowcard--mini">
+          <div class="rowcard__body">
+            <div class="rowcard__meta">
+              <span class="chip"><%= p.author_name %></span>
+              <span class="muted">•</span>
+              <span class="badge <%= p.status==='published' ? 'badge--ok' : 'badge--warn' %>"><%= p.status %></span>
+              <span class="muted">•</span>
+              <time class="muted"><%= new Date(p.created_at).toLocaleString("ru-RU") %></time>
+            </div>
+            <h2 class="rowcard__title"><a href="/post/<%= p.slug %>" target="_blank"><%= p.title %></a></h2>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

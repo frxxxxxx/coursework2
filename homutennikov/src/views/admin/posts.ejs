@@ -1,0 +1,53 @@
+<%- include("../partials/head", { title: "Админ • Посты" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Посты</h1>
+    <a class="btn btn--ghost" href="/admin">←</a>
+  </div>
+
+  <div class="card">
+    <div class="tablewrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Пост</th>
+            <th>Автор</th>
+            <th>Статус</th>
+            <th>Дата</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% posts.forEach(p => { %>
+            <tr>
+              <td>
+                <div class="tdtitle"><a class="link" href="/post/<%= p.slug %>" target="_blank"><%= p.title %></a></div>
+                <div class="muted small"><%= p.slug %></div>
+              </td>
+              <td class="muted"><%= p.author_name %></td>
+              <td>
+                <form class="inline" action="/admin/posts/<%= p.id %>/status?_method=PUT" method="post">
+                  <select class="select select--sm" name="status">
+                    <option value="published" <%= p.status==='published' ? 'selected' : '' %>>published</option>
+                    <option value="draft" <%= p.status==='draft' ? 'selected' : '' %>>draft</option>
+                  </select>
+                  <button class="btn btn--ghost btn--sm" type="submit">OK</button>
+                </form>
+              </td>
+              <td class="muted"><%= new Date(p.created_at).toLocaleDateString("ru-RU") %></td>
+              <td class="tdactions">
+                <form action="/admin/posts/<%= p.id %>?_method=DELETE" method="post" onsubmit="return confirm('Удалить пост?')">
+                  <button class="btn btn--danger btn--sm" type="submit">Удалить</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,51 @@
+<%- include("../partials/head", { title: "Лайкнутые" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Лайкнутые</h1>
+    <div class="muted">Твои сохранённые публикации — в порядке последних лайков.</div>
+  </div>
+
+  <div class="list">
+    <% if (!posts || !posts.length) { %>
+      <div class="empty">
+        <div class="empty__title">Пока пусто</div>
+        <div class="muted">Открой пост и нажми ♥ — он появится здесь.</div>
+        <div style="margin-top:12px;">
+          <a class="btn btn--primary" href="/feed">Перейти в ленту</a>
+        </div>
+      </div>
+    <% } %>
+
+    <% (posts || []).forEach(p => { %>
+      <article class="rowcard">
+        <a class="rowcard__cover" href="/post/<%= p.slug %>">
+          <% if (p.cover_url) { %>
+            <img src="<%= p.cover_url %>" alt="" loading="lazy" />
+          <% } else { %>
+            <div class="rowcard__placeholder" aria-hidden="true"></div>
+          <% } %>
+        </a>
+        <div class="rowcard__body">
+          <div class="rowcard__meta">
+            <a class="chip" href="/authors/<%= p.author_id %>"><%= p.author_name %></a>
+            <span class="muted">•</span>
+            <time class="muted" datetime="<%= p.published_at %>"><%= new Date(p.published_at).toLocaleDateString("ru-RU") %></time>
+          </div>
+          <h2 class="rowcard__title"><a href="/post/<%= p.slug %>"><%= p.title %></a></h2>
+          <p class="rowcard__text"><%= p.excerpt || "" %></p>
+          <div class="postcard__stats muted" style="margin-top:10px;">
+            <span>💬 <%= p.comments_count %></span>
+            <span>♥ <%= p.likes_count %></span>
+          </div>
+        </div>
+        <div class="rowcard__action">
+          <a class="btn btn--ghost" href="/post/<%= p.slug %>">Открыть →</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

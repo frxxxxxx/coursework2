@@ -1,0 +1,12 @@
+<%- include("../partials/head", { title: "404" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--narrow">
+  <section class="panel">
+    <h1 class="panel__title">404</h1>
+    <p class="muted">Страница не найдена: <code><%= url %></code></p>
+    <a class="btn btn--primary" href="/">На главную</a>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

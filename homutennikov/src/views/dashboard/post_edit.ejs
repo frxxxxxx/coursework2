@@ -1,0 +1,67 @@
+<%- include("../partials/head", { title: "Редактирование" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--wide">
+  <div class="section__head">
+    <h1 class="section__title">Редактирование</h1>
+    <a class="btn btn--ghost" href="/dashboard">← Назад</a>
+  </div>
+
+  <form class="editor" action="/dashboard/posts/<%= post.id %>?_method=PUT" method="post" enctype="multipart/form-data">
+    <div class="editor__left">
+      <label class="field">
+        <span class="field__label">Заголовок</span>
+        <input class="input" name="title" required maxlength="220" value="<%= post.title %>" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Короткое описание</span>
+        <input class="input" name="excerpt" maxlength="320" value="<%= post.excerpt || '' %>" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Обложка</span>
+        <div class="uploadline">
+          <input class="input" type="file" name="cover" accept="image/*" />
+          <% if (post.cover_url) { %>
+            <a class="chip" href="<%= post.cover_url %>" target="_blank">текущая</a>
+          <% } %>
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Статус</span>
+        <select class="select" name="status">
+          <option value="published" <%= post.status==='published' ? 'selected' : '' %>>published</option>
+          <option value="draft" <%= post.status==='draft' ? 'selected' : '' %>>draft</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Теги</span>
+        <div class="checks">
+          <% tags.forEach(t => { %>
+            <label class="check">
+              <input type="checkbox" name="tags" value="<%= t.id %>" <%= selectedSet.has(t.id) ? 'checked' : '' %> />
+              <span><%= t.name %></span>
+            </label>
+          <% }) %>
+        </div>
+      </label>
+    </div>
+
+    <div class="editor__right">
+      <label class="field">
+        <span class="field__label">Текст</span>
+        <textarea class="textarea textarea--editor" name="content" rows="16" required><%= post.content %></textarea>
+      </label>
+
+      <div class="editor__actions">
+        <button class="btn btn--primary" type="submit">Сохранить</button>
+        <a class="btn btn--ghost" href="/dashboard">Отмена</a>
+      </div>
+    </div>
+  </form>
+</main>
+
+<%- include("../partials/footer") %>

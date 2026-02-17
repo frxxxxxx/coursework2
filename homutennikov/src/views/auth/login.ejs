@@ -1,0 +1,25 @@
+<%- include("../partials/head", { title: "Вход" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--narrow">
+  <section class="panel">
+    <h1 class="panel__title">Вход</h1>
+    <form class="form" action="/auth/login" method="post">
+      <label class="field">
+        <span class="field__label">Email</span>
+        <input class="input" type="email" name="email" required />
+      </label>
+      <label class="field">
+        <span class="field__label">Пароль</span>
+        <input class="input" type="password" name="password" required />
+      </label>
+      <button class="btn btn--primary" type="submit">Войти</button>
+    </form>
+
+    <div class="muted">
+      Нет аккаунта? <a class="link" href="/auth/register">Регистрация</a>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

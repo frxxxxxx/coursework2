@@ -1,0 +1,67 @@
+<%- include("../partials/head", { title: "Новый пост" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page page--wide">
+  <div class="section__head">
+    <h1 class="section__title">Новый пост</h1>
+    <a class="btn btn--ghost" href="/dashboard">← Назад</a>
+  </div>
+
+  <form class="editor" action="/dashboard/posts" method="post" enctype="multipart/form-data">
+    <div class="editor__left">
+      <label class="field">
+        <span class="field__label">Заголовок</span>
+        <input class="input" name="title" required maxlength="220" placeholder="Например: Как я настроил привычки без насилия над собой" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Короткое описание</span>
+        <input class="input" name="excerpt" maxlength="320" placeholder="В 1–2 предложениях: о чём пост." />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Обложка (картинка)</span>
+        <input class="input" type="file" name="cover" accept="image/*" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Статус</span>
+        <select class="select" name="status">
+          <option value="published">published</option>
+          <option value="draft">draft</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Теги</span>
+        <div class="checks">
+          <% tags.forEach(t => { %>
+            <label class="check">
+              <input type="checkbox" name="tags" value="<%= t.id %>" />
+              <span><%= t.name %></span>
+            </label>
+          <% }) %>
+        </div>
+      </label>
+    </div>
+
+    <div class="editor__right">
+      <label class="field">
+        <span class="field__label">Текст</span>
+        <textarea class="textarea textarea--editor" name="content" rows="16" required placeholder="Поддержка: ### заголовки, - списки, **жирный**, `код`"></textarea>
+      </label>
+
+      <div class="hint">
+        <div class="hint__title">Подсказка по форматированию</div>
+        <div class="muted">### Заголовок • - Список • **жирный** • `код`</div>
+      </div>
+    </div>
+
+    <div class="editor__actions">
+      <button class="btn btn--primary" type="submit">Сохранить</button>
+      <a class="btn btn--ghost" href="/dashboard">Отмена</a>
+    </div>
+  </form>
+</main>
+
+<%- include("../partials/footer") %>

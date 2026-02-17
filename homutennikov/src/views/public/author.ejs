@@ -1,0 +1,43 @@
+<%- include("../partials/head", { title: "Автор: " + author.name }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <section class="authorcard">
+    <div class="authorcard__avatar">
+      <%- include("../partials/avatar", { user: author, size: "xl" }) %>
+    </div>
+    <div class="authorcard__body">
+      <h1 class="authorcard__name"><%= author.name %></h1>
+      <p class="muted"><%= author.bio || "Пока без описания." %></p>
+    </div>
+  </section>
+
+  <div class="section__head">
+    <h2 class="section__title">Публикации</h2>
+  </div>
+
+  <div class="list">
+    <% if (!posts.length) { %>
+      <div class="empty">
+        <div class="empty__title">Пока нет постов</div>
+      </div>
+    <% } %>
+
+    <% posts.forEach(p => { %>
+      <article class="rowcard rowcard--mini">
+        <div class="rowcard__body">
+          <div class="rowcard__meta">
+            <time class="muted"><%= new Date(p.published_at).toLocaleDateString("ru-RU") %></time>
+          </div>
+          <h2 class="rowcard__title"><a href="/post/<%= p.slug %>"><%= p.title %></a></h2>
+          <p class="rowcard__text"><%= p.excerpt || "" %></p>
+        </div>
+        <div class="rowcard__action">
+          <a class="btn btn--ghost" href="/post/<%= p.slug %>">Читать →</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

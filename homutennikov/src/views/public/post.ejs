@@ -1,0 +1,86 @@
+<%- include("../partials/head", { title: post.title }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <article class="post">
+    <header class="post__head">
+      <div class="post__meta">
+        <a class="chip" href="/authors/<%= post.author_id %>"><%= post.author_name %></a>
+        <span class="muted">•</span>
+        <time class="muted"><%= new Date(post.published_at).toLocaleDateString("ru-RU") %></time>
+      </div>
+
+      <h1 class="post__title"><%= post.title %></h1>
+
+      <% if (post.excerpt) { %>
+        <p class="post__excerpt"><%= post.excerpt %></p>
+      <% } %>
+
+      <div class="post__tags">
+        <% tags.forEach(t => { %>
+          <a class="tag tag--sm" href="/tags/<%= t.slug %>"><%= t.name %></a>
+        <% }) %>
+      </div>
+
+      <div class="post__actions">
+        <form action="/post/<%= post.id %>/like" method="post">
+          <input type="hidden" name="returnTo" value="<%= returnTo || '/feed' %>" />
+          <button class="btn btn--ghost" type="submit">
+            <span class="<%= likedByMe ? 'accent' : '' %>">♥</span> <%= likes_count %>
+          </button>
+        </form>
+        <a class="btn btn--ghost" href="/feed">Назад</a>
+      </div>
+    </header>
+
+    <% if (post.cover_url) { %>
+      <div class="post__cover">
+        <img src="<%= post.cover_url %>" alt="" loading="lazy" />
+      </div>
+    <% } %>
+
+    <section class="post__content md">
+      <%- render(post.content) %>
+    </section>
+  </article>
+
+  <section class="comments">
+    <div class="section__head">
+      <h2 class="section__title">Комментарии</h2>
+      <div class="muted"><%= comments.length %></div>
+    </div>
+
+    <form class="commentform" action="/post/<%= post.id %>/comments" method="post">
+      <input type="hidden" name="returnTo" value="<%= returnTo || '/feed' %>" />
+      <% if (!currentUser) { %>
+        <div class="commentform__row">
+          <input class="input" name="author_name" placeholder="Имя" />
+          <input class="input" name="author_email" placeholder="Email (необязательно)" />
+        </div>
+      <% } %>
+      <textarea class="textarea" name="body" rows="4" placeholder="Напиши комментарий..."></textarea>
+      <div class="commentform__actions">
+        <button class="btn btn--primary" type="submit">Отправить</button>
+      </div>
+    </form>
+
+    <div class="commentlist">
+      <% comments.forEach(c => { %>
+        <div class="comment">
+          <div class="comment__avatar">
+            <%- include("../partials/avatar", { user: c.user_id ? { name: c.user_name, avatar_url: c.user_avatar } : { name: c.author_name || 'Гость' }, size: "sm" }) %>
+          </div>
+          <div class="comment__body">
+            <div class="comment__head">
+              <div class="comment__name"><%= c.user_id ? c.user_name : (c.author_name || "Гость") %></div>
+              <div class="muted"><%= new Date(c.created_at).toLocaleString("ru-RU") %></div>
+            </div>
+            <div class="comment__text"><%= c.body %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

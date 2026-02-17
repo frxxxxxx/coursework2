@@ -1,0 +1,56 @@
+<%- include("../partials/head", { title: "Лента" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Лента</h1>
+    <div class="muted">Поиск по заголовкам/текстам и фильтр по тегу.</div>
+  </div>
+
+  <form class="filters" method="get" action="/feed">
+    <input class="input" type="search" name="q" value="<%= q %>" placeholder="Поиск: идеи, дрессировка, музыка..." />
+    <select class="select" name="tag">
+      <option value="">Все теги</option>
+      <% tags.forEach(t => { %>
+        <option value="<%= t.slug %>" <%= tag===t.slug ? "selected" : "" %>><%= t.name %></option>
+      <% }) %>
+    </select>
+    <button class="btn btn--primary" type="submit">Найти</button>
+    <a class="btn btn--ghost" href="/feed">Сброс</a>
+  </form>
+
+  <div class="list">
+    <% if (!posts.length) { %>
+      <div class="empty">
+        <div class="empty__title">Ничего не найдено</div>
+        <div class="muted">Попробуй другой запрос или убери фильтр.</div>
+      </div>
+    <% } %>
+
+    <% posts.forEach(p => { %>
+      <article class="rowcard">
+        <a class="rowcard__cover" href="/post/<%= p.slug %>">
+          <% if (p.cover_url) { %>
+            <img src="<%= p.cover_url %>" alt="" loading="lazy" />
+          <% } else { %>
+            <div class="rowcard__placeholder" aria-hidden="true"></div>
+          <% } %>
+        </a>
+        <div class="rowcard__body">
+          <div class="rowcard__meta">
+            <a class="chip" href="/authors/<%= p.author_id %>"><%= p.author_name %></a>
+            <span class="muted">•</span>
+            <time class="muted" datetime="<%= p.published_at %>"><%= new Date(p.published_at).toLocaleDateString("ru-RU") %></time>
+          </div>
+          <h2 class="rowcard__title"><a href="/post/<%= p.slug %>"><%= p.title %></a></h2>
+          <p class="rowcard__text"><%= p.excerpt || "" %></p>
+        </div>
+        <div class="rowcard__action">
+          <a class="btn btn--ghost" href="/post/<%= p.slug %>">Читать →</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

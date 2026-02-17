@@ -1,0 +1,9 @@
+<% const av = (user && user.avatar_url) ? user.avatar_url : null; %>
+<% const letter = (user && user.name) ? user.name.trim().charAt(0).toUpperCase() : "?" %>
+<div class="avatar <%= size ? ('avatar--' + size) : '' %>">
+  <% if (av) { %>
+    <img src="<%= av %>" alt="avatar" loading="lazy" />
+  <% } else { %>
+    <span class="avatar__letter" aria-hidden="true"><%= letter %></span>
+  <% } %>
+</div>

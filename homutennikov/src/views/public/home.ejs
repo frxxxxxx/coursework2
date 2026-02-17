@@ -1,0 +1,92 @@
+<%- include("../partials/head", { title: "Главная" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <section class="hero">
+    <div class="hero__grid">
+      <div class="hero__main">
+        <h1 class="hero__title">Пульс заметок, идей и маленьких экспериментов</h1>
+        <p class="hero__lead">
+          PulseBlog — аккуратная блог-платформа: теги, лайки, комментарии и свой кабинет для авторов.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/feed">Открыть ленту</a>
+          <% if (currentUser) { %>
+            <a class="btn btn--ghost" href="/dashboard/posts/new">Написать пост</a>
+          <% } else { %>
+            <a class="btn btn--ghost" href="/auth/register">Создать аккаунт</a>
+          <% } %>
+        </div>
+      </div>
+
+      <aside class="hero__side">
+        <div class="card card--glow">
+          <div class="card__title">Топ-теги</div>
+          <div class="tagcloud">
+            <% tags.forEach(t => { %>
+              <a class="tag" href="/tags/<%= t.slug %>">
+                <span class="tag__name"><%= t.name %></span>
+                <span class="tag__cnt"><%= t.cnt %></span>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+
+        <div class="ticker" aria-label="Подсказка">
+          <div class="ticker__line">
+            <span>✨ быстрый сидер • 10 пользователей • 30 постов • админка • адаптив</span>
+            <span>✨ быстрый сидер • 10 пользователей • 30 постов • админка • адаптив</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Свежие публикации</h2>
+      <a class="link" href="/feed">вся лента →</a>
+    </div>
+
+    <div class="grid">
+      <% posts.forEach(p => { %>
+        <article class="postcard">
+          <a class="postcard__cover" href="/post/<%= p.slug %>">
+            <% if (p.cover_url) { %>
+              <img src="<%= p.cover_url %>" alt="" loading="lazy" />
+            <% } else { %>
+              <div class="postcard__placeholder" aria-hidden="true"></div>
+            <% } %>
+          </a>
+
+          <div class="postcard__body">
+            <div class="postcard__meta">
+              <a class="chip" href="/authors/<%= p.author_id %>"><%= p.author_name %></a>
+              <span class="muted">•</span>
+              <time class="muted" datetime="<%= p.published_at %>"><%= new Date(p.published_at).toLocaleDateString("ru-RU") %></time>
+            </div>
+
+            <h3 class="postcard__title">
+              <a href="/post/<%= p.slug %>"><%= p.title %></a>
+            </h3>
+
+            <p class="postcard__text"><%= p.excerpt || "Без описания — открой пост, там всё самое интересное." %></p>
+
+            <div class="postcard__stats muted">
+              <span>💬 <%= p.comments_count %></span>
+              <span>♥ <%= p.likes_count %></span>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+
+    <div class="pager">
+      <a class="btn btn--ghost <%= page<=1 ? 'is-disabled' : '' %>" href="/?page=<%= Math.max(1, page-1) %>">←</a>
+      <div class="pager__info muted"><%= page %> / <%= totalPages %></div>
+      <a class="btn btn--ghost <%= page>=totalPages ? 'is-disabled' : '' %>" href="/?page=<%= Math.min(totalPages, page+1) %>">→</a>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

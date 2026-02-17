@@ -1,0 +1,53 @@
+<%- include("../partials/head", { title: "Админ • Пользователи" }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Пользователи</h1>
+    <a class="btn btn--ghost" href="/admin">←</a>
+  </div>
+
+  <div class="card">
+    <div class="tablewrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Пользователь</th>
+            <th>Роль</th>
+            <th>Посты</th>
+            <th>Создан</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+            <tr>
+              <td>
+                <div class="tdtitle"><%= u.name %></div>
+                <div class="muted small"><%= u.email %></div>
+              </td>
+              <td>
+                <form class="inline" action="/admin/users/<%= u.id %>/role?_method=PUT" method="post">
+                  <select class="select select--sm" name="role" <%= u.email==='admin@blog.local' ? 'disabled' : '' %>>
+                    <option value="author" <%= u.role==='author' ? 'selected' : '' %>>author</option>
+                    <option value="admin" <%= u.role==='admin' ? 'selected' : '' %>>admin</option>
+                  </select>
+                  <button class="btn btn--ghost btn--sm" type="submit" <%= u.email==='admin@blog.local' ? 'disabled' : '' %>>OK</button>
+                </form>
+              </td>
+              <td class="muted"><%= u.posts_count %></td>
+              <td class="muted"><%= new Date(u.created_at).toLocaleDateString("ru-RU") %></td>
+              <td class="tdactions">
+                <form action="/admin/users/<%= u.id %>?_method=DELETE" method="post" onsubmit="return confirm('Удалить пользователя?')">
+                  <button class="btn btn--danger btn--sm" type="submit" <%= u.email==='admin@blog.local' ? 'disabled' : '' %>>Удалить</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

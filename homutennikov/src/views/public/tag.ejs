@@ -1,0 +1,34 @@
+<%- include("../partials/head", { title: "Тег: " + tag.name }) %>
+<%- include("../partials/header") %>
+
+<main class="container page">
+  <div class="section__head">
+    <h1 class="section__title">Тег: <span class="accent"><%= tag.name %></span></h1>
+    <a class="link" href="/feed?tag=<%= tag.slug %>">открыть в ленте →</a>
+  </div>
+
+  <div class="grid">
+    <% posts.forEach(p => { %>
+      <article class="postcard postcard--tight">
+        <a class="postcard__cover" href="/post/<%= p.slug %>">
+          <% if (p.cover_url) { %>
+            <img src="<%= p.cover_url %>" alt="" loading="lazy" />
+          <% } else { %>
+            <div class="postcard__placeholder" aria-hidden="true"></div>
+          <% } %>
+        </a>
+        <div class="postcard__body">
+          <div class="postcard__meta">
+            <a class="chip" href="/authors/<%= p.author_id %>"><%= p.author_name %></a>
+            <span class="muted">•</span>
+            <time class="muted"><%= new Date(p.published_at).toLocaleDateString("ru-RU") %></time>
+          </div>
+          <h3 class="postcard__title"><a href="/post/<%= p.slug %>"><%= p.title %></a></h3>
+          <p class="postcard__text"><%= p.excerpt || "" %></p>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
